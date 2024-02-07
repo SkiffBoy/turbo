@@ -6,7 +6,24 @@
 > 3. Fastjson 替换为 Fastjson2
 > 4. sql 脚本字符编码语法调整
 > 5. 测试用例语法调整，并且使用maven插件测试全部通过
-> 6. jar 版本不变，构建名称 engine 更改为 engine-fork
+> 6. 构建坐标 com.didiglobal.turbo:engine 发布为 io.github.skiffboy:turbo-engine
+
+* maven 坐标更改
+```xml
+<dependency>
+  <groupId>io.github.skiffboy</groupId>
+  <artifactId>turbo-engine</artifactId>
+  <version>1.1.1</version>
+</dependency>
+```
+
+```xml
+<dependency>
+  <groupId>io.github.skiffboy</groupId>
+  <artifactId>turbo-engine-demo</artifactId>
+  <version>1.1.1</version>
+</dependency>
+```
 
 
 # Turbo 简介

@@ -4,16 +4,21 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>com.didiglobal.turbo</groupId>
-        <artifactId>turbo</artifactId>
+        <groupId>io.github.skiffboy</groupId>
+        <artifactId>turbo-forked</artifactId>
         <version>1.1.1</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>demo</artifactId>
+    <groupId>io.github.skiffboy</groupId>
+    <artifactId>turbo-engine-demo</artifactId>
     <version>1.1.1</version>
     <packaging>jar</packaging>
+
+    <name>turbo-engine-demo</name>
+    <description>Turbo is a light-weight flow engine framework, support BPMN2.0</description>
+    <url>https://github.com/SkiffBoy/turbo</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,6 +27,7 @@
         <turbo.engine.version>1.1.1</turbo.engine.version>
         <h2.version>1.4.200</h2.version>
         <fastjson2.version>2.0.46</fastjson2.version>
+        <maven.deploy.skip>false</maven.deploy.skip>
     </properties>
 
     <dependencies>
@@ -37,8 +43,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.didiglobal.turbo</groupId>
-            <artifactId>engine-fork</artifactId>
+            <groupId>io.github.skiffboy</groupId>
+            <artifactId>turbo-engine</artifactId>
             <version>${turbo.engine.version}</version>
         </dependency>
         <dependency>
