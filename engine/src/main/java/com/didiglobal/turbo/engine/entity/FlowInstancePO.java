@@ -1,10 +1,10 @@
 package com.didiglobal.turbo.engine.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Table;
 
 import java.util.Date;
 
-@TableName("ei_flow_instance")
+@Table("ei_flow_instance")
 public class FlowInstancePO extends CommonPO {
     private String flowInstanceId;
     private String flowDeployId;

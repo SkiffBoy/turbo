@@ -3,10 +3,14 @@ package com.didiglobal.turbo.engine.dao.mapper;
 import com.didiglobal.turbo.engine.entity.InstanceDataPO;
 import com.didiglobal.turbo.engine.runner.BaseTest;
 import com.didiglobal.turbo.engine.util.EntityBuilder;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
+@Rollback
 public class InstanceDataMapperTest extends BaseTest {
 
     @Autowired
@@ -15,26 +19,26 @@ public class InstanceDataMapperTest extends BaseTest {
     @Test
     public void insert() {
         InstanceDataPO instanceDataPO = EntityBuilder.buildDynamicInstanceDataPO();
-        int result = instanceDataMapper.insert(instanceDataPO);
+        int result = instanceDataMapper.insertSelective(instanceDataPO);
         LOGGER.info("insert.result={}", result);
-        Assert.assertTrue(result == 1);
+        Assertions.assertTrue(result == 1);
     }
 
     @Test
     public void select() {
         InstanceDataPO instanceDataPO = EntityBuilder.buildDynamicInstanceDataPO();
-        instanceDataMapper.insert(instanceDataPO);
+        instanceDataMapper.insertSelective(instanceDataPO);
         InstanceDataPO result = instanceDataMapper.select(instanceDataPO.getFlowInstanceId(), instanceDataPO.getInstanceDataId());
-        Assert.assertTrue(result.getInstanceDataId().equals(instanceDataPO.getInstanceDataId()));
+        Assertions.assertTrue(result.getInstanceDataId().equals(instanceDataPO.getInstanceDataId()));
     }
 
     @Test
     public void selectRecentOne() {
         InstanceDataPO oldInstanceDataPO = EntityBuilder.buildDynamicInstanceDataPO();
-        instanceDataMapper.insert(oldInstanceDataPO);
+        instanceDataMapper.insertSelective(oldInstanceDataPO);
         InstanceDataPO newInstanceDataPO = EntityBuilder.buildDynamicInstanceDataPO();
-        instanceDataMapper.insert(newInstanceDataPO);
+        instanceDataMapper.insertSelective(newInstanceDataPO);
         InstanceDataPO result = instanceDataMapper.selectRecentOne(oldInstanceDataPO.getFlowInstanceId());
-        Assert.assertTrue(result.getInstanceDataId().equals(newInstanceDataPO.getInstanceDataId()));
+        Assertions.assertTrue(result.getInstanceDataId().equals(newInstanceDataPO.getInstanceDataId()));
     }
 }

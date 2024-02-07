@@ -17,18 +17,14 @@ import com.didiglobal.turbo.engine.result.StartProcessResult;
 import com.didiglobal.turbo.engine.result.UpdateFlowResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@Order(1)
 @Component
-public class CommonDemoRunner implements CommandLineRunner {
+public class CommonDemoRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonDemoRunner.class);
 
@@ -44,8 +40,7 @@ public class CommonDemoRunner implements CommandLineRunner {
     private UpdateFlowResult updateFlowResult;
     private DeployFlowResult deployFlowResult;
 
-    @Override
-    public void run(String... args) throws Exception {
+    public void run() {
         LOGGER.info("Turbo Common Demo run:");
 
         LOGGER.info("Turbo definition:");

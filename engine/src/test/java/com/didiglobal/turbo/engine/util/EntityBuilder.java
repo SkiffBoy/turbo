@@ -1,7 +1,7 @@
 package com.didiglobal.turbo.engine.util;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.didiglobal.turbo.engine.bo.NodeInstanceBO;
 import com.didiglobal.turbo.engine.common.*;
 import com.didiglobal.turbo.engine.entity.*;

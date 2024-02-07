@@ -1,6 +1,6 @@
 package com.didiglobal.turbo.engine.executor.callactivity;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.didiglobal.turbo.engine.bo.DataTransferBO;
 import com.didiglobal.turbo.engine.common.Constants;
 import com.didiglobal.turbo.engine.common.ErrorEnum;

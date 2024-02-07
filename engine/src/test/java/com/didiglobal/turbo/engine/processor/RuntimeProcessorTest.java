@@ -1,6 +1,6 @@
 package com.didiglobal.turbo.engine.processor;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.didiglobal.turbo.engine.bo.ElementInstance;
 import com.didiglobal.turbo.engine.bo.NodeInstance;
 import com.didiglobal.turbo.engine.common.ErrorEnum;
@@ -10,17 +10,32 @@ import com.didiglobal.turbo.engine.model.InstanceData;
 import com.didiglobal.turbo.engine.param.CommitTaskParam;
 import com.didiglobal.turbo.engine.param.RollbackTaskParam;
 import com.didiglobal.turbo.engine.param.StartProcessParam;
-import com.didiglobal.turbo.engine.result.*;
+import com.didiglobal.turbo.engine.result.CommitTaskResult;
+import com.didiglobal.turbo.engine.result.ElementInstanceListResult;
+import com.didiglobal.turbo.engine.result.InstanceDataListResult;
+import com.didiglobal.turbo.engine.result.NodeInstanceListResult;
+import com.didiglobal.turbo.engine.result.NodeInstanceResult;
+import com.didiglobal.turbo.engine.result.RollbackTaskResult;
+import com.didiglobal.turbo.engine.result.StartProcessResult;
+import com.didiglobal.turbo.engine.result.TerminateResult;
 import com.didiglobal.turbo.engine.runner.BaseTest;
 import com.didiglobal.turbo.engine.util.EntityBuilder;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+@Transactional
+@Rollback
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RuntimeProcessorTest extends BaseTest {
 
     @Resource
@@ -36,10 +51,10 @@ public class RuntimeProcessorTest extends BaseTest {
         if (_flowDeploymentPO != null) {
             if (!StringUtils.equals(_flowDeploymentPO.getFlowModel(), flowDeploymentPO.getFlowModel())) {
                 flowDeploymentMapper.deleteById(_flowDeploymentPO.getId());
-                flowDeploymentMapper.insert(flowDeploymentPO);
+                flowDeploymentMapper.insertSelective(flowDeploymentPO);
             }
         } else {
-            flowDeploymentMapper.insert(flowDeploymentPO);
+            flowDeploymentMapper.insertSelective(flowDeploymentPO);
         }
 
         // start process
@@ -54,14 +69,16 @@ public class RuntimeProcessorTest extends BaseTest {
     }
 
     @Test
+    @Order(1)
     public void testStartProcess() throws Exception {
         StartProcessResult startProcessResult = startProcess();
-        Assert.assertTrue(startProcessResult.getErrCode() == ErrorEnum.COMMIT_SUSPEND.getErrNo());
-        Assert.assertTrue(StringUtils.equals(startProcessResult.getActiveTaskInstance().getModelKey(), "BranchUserTask_0scrl8d"));
+        Assertions.assertTrue(startProcessResult.getErrCode() == ErrorEnum.COMMIT_SUSPEND.getErrNo());
+        Assertions.assertTrue(StringUtils.equals(startProcessResult.getActiveTaskInstance().getModelKey(), "BranchUserTask_0scrl8d"));
     }
 
     // UserTask -> EndEvent
     @Test
+    @Order(2)
     public void testNormalCommitToEnd() throws Exception {
         StartProcessResult startProcessResult = startProcess();
 
@@ -74,12 +91,13 @@ public class RuntimeProcessorTest extends BaseTest {
 
         CommitTaskResult commitTaskResult = runtimeProcessor.commit(commitTaskParam);
         LOGGER.info("testCommit.||commitTaskResult={}", commitTaskResult);
-        Assert.assertTrue(commitTaskResult.getErrCode() == ErrorEnum.SUCCESS.getErrNo());
-        Assert.assertTrue(StringUtils.equals(commitTaskResult.getActiveTaskInstance().getModelKey(), "EndEvent_0s4vsxw"));
+        Assertions.assertTrue(commitTaskResult.getErrCode() == ErrorEnum.SUCCESS.getErrNo());
+        Assertions.assertTrue(StringUtils.equals(commitTaskResult.getActiveTaskInstance().getModelKey(), "EndEvent_0s4vsxw"));
     }
 
     // UserTask -> ExclusiveGateway -> UserTask
     @Test
+    @Order(3)
     public void testNormalCommitToUserTask() throws Exception {
         StartProcessResult startProcessResult = startProcess();
 
@@ -92,13 +110,14 @@ public class RuntimeProcessorTest extends BaseTest {
 
         CommitTaskResult commitTaskResult = runtimeProcessor.commit(commitTaskParam);
         LOGGER.info("testCommit.||commitTaskResult={}", commitTaskResult);
-        Assert.assertTrue(commitTaskResult.getErrCode() == ErrorEnum.COMMIT_SUSPEND.getErrNo());
-        Assert.assertTrue(StringUtils.equals(commitTaskResult.getActiveTaskInstance().getModelKey(), "UserTask_0uld0u9"));
+        Assertions.assertTrue(commitTaskResult.getErrCode() == ErrorEnum.COMMIT_SUSPEND.getErrNo());
+        Assertions.assertTrue(StringUtils.equals(commitTaskResult.getActiveTaskInstance().getModelKey(), "UserTask_0uld0u9"));
     }
 
     // UserTask -> ExclusiveGateway -> UserTask
     // UserTask ->
     @Test
+    @Order(4)
     public void testRepeatedCommitToUserTask() throws Exception {
         StartProcessResult startProcessResult = startProcess();
 
@@ -113,12 +132,13 @@ public class RuntimeProcessorTest extends BaseTest {
         commitTaskResult = runtimeProcessor.commit(commitTaskParam);
         LOGGER.info("testCommit.||commitTaskResult={}", commitTaskResult);
 
-        Assert.assertTrue(commitTaskResult.getErrCode() == ErrorEnum.COMMIT_SUSPEND.getErrNo());
-        Assert.assertTrue(StringUtils.equals(commitTaskResult.getActiveTaskInstance().getModelKey(), "UserTask_0uld0u9"));
+        Assertions.assertTrue(commitTaskResult.getErrCode() == ErrorEnum.COMMIT_SUSPEND.getErrNo());
+        Assertions.assertTrue(StringUtils.equals(commitTaskResult.getActiveTaskInstance().getModelKey(), "UserTask_0uld0u9"));
     }
 
     // UserTask -> EndEvent -> Commit again
     @Test
+    @Order(5)
     public void testCommitCompletedFlowInstance() throws Exception {
         StartProcessResult startProcessResult = startProcess();
 
@@ -133,10 +153,11 @@ public class RuntimeProcessorTest extends BaseTest {
         commitTaskResult = runtimeProcessor.commit(commitTaskParam);
         LOGGER.info("testCommit.||commitTaskResult={}", commitTaskResult);
 
-        Assert.assertTrue(commitTaskResult.getErrCode() == ErrorEnum.REENTRANT_WARNING.getErrNo());
+        Assertions.assertTrue(commitTaskResult.getErrCode() == ErrorEnum.REENTRANT_WARNING.getErrNo());
     }
 
     @Test
+    @Order(6)
     public void testCommitTerminatedFlowInstance() throws Exception {
         StartProcessResult startProcessResult = startProcess();
 
@@ -150,11 +171,12 @@ public class RuntimeProcessorTest extends BaseTest {
         commitTaskParam.setVariables(variables);
         CommitTaskResult commitTaskResult = runtimeProcessor.commit(commitTaskParam);
 
-        Assert.assertTrue(commitTaskResult.getErrCode() == ErrorEnum.COMMIT_REJECTRD.getErrNo());
+        Assertions.assertTrue(commitTaskResult.getErrCode() == ErrorEnum.COMMIT_REJECTRD.getErrNo());
     }
 
     // UserTask <- ExclusiveGateway <- UserTask : Commit old UserTask
     @Test
+    @Order(7)
     public void testRollbackToUserTaskAndCommitOldUserTask() throws Exception {
         // start process
         StartProcessResult startProcessResult = startProcess();
@@ -178,11 +200,12 @@ public class RuntimeProcessorTest extends BaseTest {
         commitTaskResult = runtimeProcessor.commit(commitTaskParam);
 
         LOGGER.info("testRollbackToUserTaskAndCommitOldUserTask.||commitTaskResult={}", commitTaskResult);
-        Assert.assertTrue(commitTaskResult.getErrCode() == ErrorEnum.COMMIT_FAILED.getErrNo());
-        Assert.assertTrue(StringUtils.equals(commitTaskResult.getActiveTaskInstance().getModelKey(), "BranchUserTask_0scrl8d"));
+        Assertions.assertTrue(commitTaskResult.getErrCode() == ErrorEnum.COMMIT_FAILED.getErrNo());
+        Assertions.assertTrue(StringUtils.equals(commitTaskResult.getActiveTaskInstance().getModelKey(), "BranchUserTask_0scrl8d"));
     }
 
     @Test
+    @Order(8)
     public void testRollbackFromMiddleUserTask() throws Exception {
         // start process
         StartProcessResult startProcessResult = startProcess();
@@ -206,8 +229,8 @@ public class RuntimeProcessorTest extends BaseTest {
 
         // Ignore current userTask
         LOGGER.info("testRollbackFromMiddleUserTask.||rollbackTaskResult={}", rollbackTaskResult);
-        Assert.assertTrue(rollbackTaskResult.getErrCode() == ErrorEnum.ROLLBACK_SUSPEND.getErrNo());
-        Assert.assertTrue(StringUtils.equals(rollbackTaskResult.getActiveTaskInstance().getModelKey(), "BranchUserTask_0scrl8d"));
+        Assertions.assertTrue(rollbackTaskResult.getErrCode() == ErrorEnum.ROLLBACK_SUSPEND.getErrNo());
+        Assertions.assertTrue(StringUtils.equals(rollbackTaskResult.getActiveTaskInstance().getModelKey(), "BranchUserTask_0scrl8d"));
     }
 
 
@@ -234,8 +257,8 @@ public class RuntimeProcessorTest extends BaseTest {
         RollbackTaskResult rollbackTaskResult = runtimeProcessor.rollback(rollbackTaskParam);
 
         LOGGER.info("testRollback.||rollbackTaskResult={}", rollbackTaskResult);
-        Assert.assertTrue(rollbackTaskResult.getErrCode() == ErrorEnum.ROLLBACK_SUSPEND.getErrNo());
-        Assert.assertTrue(StringUtils.equals(rollbackTaskResult.getActiveTaskInstance().getModelKey(), "BranchUserTask_0scrl8d"));
+        Assertions.assertTrue(rollbackTaskResult.getErrCode() == ErrorEnum.ROLLBACK_SUSPEND.getErrNo());
+        Assertions.assertTrue(StringUtils.equals(rollbackTaskResult.getActiveTaskInstance().getModelKey(), "BranchUserTask_0scrl8d"));
     }
 
     // StartEvent <- UserTask
@@ -265,7 +288,7 @@ public class RuntimeProcessorTest extends BaseTest {
         rollbackTaskParam.setTaskInstanceId(rollbackTaskResult.getActiveTaskInstance().getNodeInstanceId());
         rollbackTaskResult = runtimeProcessor.rollback(rollbackTaskParam);
         LOGGER.info("testRollback.||rollbackTaskResult={}", rollbackTaskResult);
-        Assert.assertTrue(rollbackTaskResult.getErrCode() == ErrorEnum.NO_USER_TASK_TO_ROLLBACK.getErrNo());
+        Assertions.assertTrue(rollbackTaskResult.getErrCode() == ErrorEnum.NO_USER_TASK_TO_ROLLBACK.getErrNo());
     }
 
     // rollback completed process
@@ -290,7 +313,7 @@ public class RuntimeProcessorTest extends BaseTest {
         RollbackTaskResult rollbackTaskResult = runtimeProcessor.rollback(rollbackTaskParam);
 
         LOGGER.info("testRollback.||rollbackTaskResult={}", rollbackTaskResult);
-        Assert.assertTrue(rollbackTaskResult.getErrCode() == ErrorEnum.ROLLBACK_REJECTRD.getErrNo());
+        Assertions.assertTrue(rollbackTaskResult.getErrCode() == ErrorEnum.ROLLBACK_REJECTRD.getErrNo());
     }
 
     @Test
@@ -298,7 +321,7 @@ public class RuntimeProcessorTest extends BaseTest {
         StartProcessResult startProcessResult = startProcess();
         TerminateResult terminateResult = runtimeProcessor.terminateProcess(startProcessResult.getFlowInstanceId(), false);
         LOGGER.info("testTerminateProcess.||terminateResult={}", terminateResult);
-        Assert.assertTrue(terminateResult.getErrCode() == ErrorEnum.SUCCESS.getErrNo());
+        Assertions.assertTrue(terminateResult.getErrCode() == ErrorEnum.SUCCESS.getErrNo());
     }
 
     @Test
@@ -326,8 +349,8 @@ public class RuntimeProcessorTest extends BaseTest {
         }
         LOGGER.info("testGetHistoryUserTaskList.||snapshot={}", sb.toString());
 
-        Assert.assertTrue(nodeInstanceListResult.getNodeInstanceList().size() == 2);
-        Assert.assertTrue(StringUtils.equals(nodeInstanceListResult.getNodeInstanceList().get(0).getModelKey(), "UserTask_0uld0u9"));
+        Assertions.assertTrue(nodeInstanceListResult.getNodeInstanceList().size() == 2);
+        Assertions.assertTrue(StringUtils.equals(nodeInstanceListResult.getNodeInstanceList().get(0).getModelKey(), "UserTask_0uld0u9"));
     }
 
 
@@ -345,7 +368,7 @@ public class RuntimeProcessorTest extends BaseTest {
         // UserTask -> ExclusiveGateway : Failed
         CommitTaskResult commitTaskResult = runtimeProcessor.commit(commitTaskParam);
         LOGGER.info("testGetFailedHistoryElementList.||commitTaskResult={}", commitTaskResult);
-        Assert.assertTrue(commitTaskResult.getErrCode() == ErrorEnum.GET_OUTGOING_FAILED.getErrNo());
+        Assertions.assertTrue(commitTaskResult.getErrCode() == ErrorEnum.GET_OUTGOING_FAILED.getErrNo());
 
         ElementInstanceListResult elementInstanceListResult = runtimeProcessor.getHistoryElementList(commitTaskResult.getFlowInstanceId(), false);
         LOGGER.info("testGetHistoryElementList.||elementInstanceListResult={}", elementInstanceListResult);
@@ -359,8 +382,8 @@ public class RuntimeProcessorTest extends BaseTest {
         }
         LOGGER.info("testGetHistoryElementList.||snapshot={}", sb.toString());
 
-        Assert.assertTrue(elementInstanceListResult.getElementInstanceList().size() == 5);
-        Assert.assertTrue(StringUtils.equals(elementInstanceListResult.getElementInstanceList().get(4).getModelKey(), "ExclusiveGateway_0yq2l0s"));
+        Assertions.assertTrue(elementInstanceListResult.getElementInstanceList().size() == 5);
+        Assertions.assertTrue(StringUtils.equals(elementInstanceListResult.getElementInstanceList().get(4).getModelKey(), "ExclusiveGateway_0yq2l0s"));
     }
 
     @Test
@@ -388,8 +411,8 @@ public class RuntimeProcessorTest extends BaseTest {
         }
         LOGGER.info("testGetHistoryElementList.||snapshot={}", sb.toString());
 
-        Assert.assertTrue(elementInstanceListResult.getElementInstanceList().size() == 5);
-        Assert.assertTrue(StringUtils.equals(elementInstanceListResult.getElementInstanceList().get(4).getModelKey(), "EndEvent_0s4vsxw"));
+        Assertions.assertTrue(elementInstanceListResult.getElementInstanceList().size() == 5);
+        Assertions.assertTrue(StringUtils.equals(elementInstanceListResult.getElementInstanceList().get(4).getModelKey(), "EndEvent_0s4vsxw"));
     }
 
 
@@ -442,7 +465,7 @@ public class RuntimeProcessorTest extends BaseTest {
         LOGGER.info("testGetInstanceData 5.||instanceDataList={}", instanceDataList);
         String initData = JSON.toJSONString(startProcessResult.getVariables());
         String rollbackData = JSON.toJSONString(rollbackTaskResult1.getVariables());
-        Assert.assertTrue(StringUtils.equals(initData, rollbackData));
+        Assertions.assertTrue(StringUtils.equals(initData, rollbackData));
     }
 
     @Test
@@ -452,6 +475,6 @@ public class RuntimeProcessorTest extends BaseTest {
         NodeInstanceResult nodeInstanceResult = runtimeProcessor.getNodeInstance(flowInstanceId, startProcessResult.getActiveTaskInstance().getNodeInstanceId(), false);
         LOGGER.info("testGetNodeInstance.||nodeInstanceResult={}", nodeInstanceResult);
 
-        Assert.assertTrue(StringUtils.equals(nodeInstanceResult.getNodeInstance().getNodeInstanceId(), startProcessResult.getActiveTaskInstance().getNodeInstanceId()));
+        Assertions.assertTrue(StringUtils.equals(nodeInstanceResult.getNodeInstance().getNodeInstanceId(), startProcessResult.getActiveTaskInstance().getNodeInstanceId()));
     }
 }

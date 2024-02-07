@@ -1,3 +1,14 @@
+`2024年 02月06日 10:45`  fork 自 [https://github.com/didi/turbo/](https://github.com/didi/turbo/)
+
+> fork 之后的变动内容
+> 1. 替换 Dao 层的 mybatis-plus 为 mybatis-flex
+> 2. SpringBoot 升级为 2.x
+> 3. Fastjson 替换为 Fastjson2
+> 4. sql 脚本字符编码语法调整
+> 5. 测试用例语法调整，并且使用maven插件测试全部通过
+> 6. jar 版本不变，构建名称 engine 更改为 engine-fork
+
+
 # Turbo 简介
 
 Turbo是一款Java实现的轻量级流程引擎，是公司内多个低代码平台的核心后端服务。
@@ -209,7 +220,7 @@ spring.datasource.dynamic.primary=engine
 spring.datasource.dynamic.datasource.engine.type=com.alibaba.druid.pool.DruidDataSource
 spring.datasource.dynamic.datasource.engine.username=username
 spring.datasource.dynamic.datasource.engine.password=password
-spring.datasource.dynamic.datasource.engine.driver-class-name=com.mysql.jdbc.Driver
+spring.datasource.dynamic.datasource.engine.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.datasource.dynamic.datasource.engine.url=jdbc:mysql://127.0.0.1:3306/db_engine
 
 ```

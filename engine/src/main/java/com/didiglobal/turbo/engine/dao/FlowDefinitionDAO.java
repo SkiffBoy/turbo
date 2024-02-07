@@ -1,10 +1,11 @@
 package com.didiglobal.turbo.engine.dao;
 
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.didiglobal.turbo.engine.dao.mapper.FlowDefinitionMapper;
 import com.didiglobal.turbo.engine.entity.FlowDefinitionPO;
+import com.mybatisflex.core.query.QueryWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
+
 
 @Repository
 public class FlowDefinitionDAO extends BaseDAO<FlowDefinitionMapper, FlowDefinitionPO> {
@@ -17,7 +18,7 @@ public class FlowDefinitionDAO extends BaseDAO<FlowDefinitionMapper, FlowDefinit
      */
     public int insert(FlowDefinitionPO flowDefinitionPO) {
         try {
-            return baseMapper.insert(flowDefinitionPO);
+            return mapper.insertSelective(flowDefinitionPO);
         } catch (Exception e) {
             LOGGER.error("insert exception.||flowDefinitionPO={}", flowDefinitionPO, e);
         }
@@ -41,9 +42,9 @@ public class FlowDefinitionDAO extends BaseDAO<FlowDefinitionMapper, FlowDefinit
                 LOGGER.warn("updateByModuleId failed: flowModuleId is empty.||flowDefinitionPO={}", flowDefinitionPO);
                 return -1;
             }
-            UpdateWrapper<FlowDefinitionPO> updateWrapper = new UpdateWrapper<>();
+            QueryWrapper updateWrapper = QueryWrapper.create();
             updateWrapper.eq("flow_module_id", flowModuleId);
-            return baseMapper.update(flowDefinitionPO, updateWrapper);
+            return mapper.updateByQuery(flowDefinitionPO, updateWrapper);
         } catch (Exception e) {
             LOGGER.error("update exception.||flowDefinitionPO={}", flowDefinitionPO, e);
         }
@@ -62,7 +63,7 @@ public class FlowDefinitionDAO extends BaseDAO<FlowDefinitionMapper, FlowDefinit
             return null;
         }
         try {
-            return baseMapper.selectByFlowModuleId(flowModuleId);
+            return mapper.selectByFlowModuleId(flowModuleId);
         } catch (Exception e) {
             LOGGER.error("getById exception.||flowModuleId={}", flowModuleId, e);
         }

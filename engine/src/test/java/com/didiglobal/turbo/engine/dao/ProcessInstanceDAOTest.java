@@ -5,11 +5,15 @@ import com.didiglobal.turbo.engine.entity.FlowInstancePO;
 import com.didiglobal.turbo.engine.runner.BaseTest;
 import com.didiglobal.turbo.engine.util.EntityBuilder;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
+@Transactional
+@Rollback
 public class ProcessInstanceDAOTest extends BaseTest {
 
     @Resource
@@ -20,7 +24,7 @@ public class ProcessInstanceDAOTest extends BaseTest {
         FlowInstancePO flowInstancePO = EntityBuilder.buildDynamicFlowInstancePO();
         int result = processInstanceDAO.insert(flowInstancePO);
         LOGGER.info("insertTest.result={}", result);
-        Assert.assertTrue(result == 1);
+        Assertions.assertTrue(result == 1);
     }
 
     @Test
@@ -29,7 +33,7 @@ public class ProcessInstanceDAOTest extends BaseTest {
         processInstanceDAO.insert(flowInstancePO);
         String flowInstanceId = flowInstancePO.getFlowInstanceId();
         flowInstancePO = processInstanceDAO.selectByFlowInstanceId(flowInstancePO.getFlowInstanceId());
-        Assert.assertTrue(StringUtils.equals(flowInstancePO.getFlowInstanceId(), flowInstanceId));
+        Assertions.assertTrue(StringUtils.equals(flowInstancePO.getFlowInstanceId(), flowInstanceId));
     }
 
     @Test
@@ -39,7 +43,7 @@ public class ProcessInstanceDAOTest extends BaseTest {
         // change status
         processInstanceDAO.updateStatus(flowInstancePO, FlowInstanceStatus.COMPLETED);
         FlowInstancePO result = processInstanceDAO.selectByFlowInstanceId(flowInstancePO.getFlowInstanceId());
-        Assert.assertTrue(result.getStatus() == FlowInstanceStatus.COMPLETED);
+        Assertions.assertTrue(result.getStatus() == FlowInstanceStatus.COMPLETED);
     }
 
     @Test
@@ -49,6 +53,6 @@ public class ProcessInstanceDAOTest extends BaseTest {
         // change status
         processInstanceDAO.updateStatus(flowInstancePO.getFlowInstanceId(), FlowInstanceStatus.COMPLETED);
         FlowInstancePO result = processInstanceDAO.selectByFlowInstanceId(flowInstancePO.getFlowInstanceId());
-        Assert.assertTrue(result.getStatus() == FlowInstanceStatus.COMPLETED);
+        Assertions.assertTrue(result.getStatus() == FlowInstanceStatus.COMPLETED);
     }
 }

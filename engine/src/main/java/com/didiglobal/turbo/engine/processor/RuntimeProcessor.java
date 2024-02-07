@@ -1,7 +1,7 @@
 package com.didiglobal.turbo.engine.processor;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.TypeReference;
 import com.didiglobal.turbo.engine.bo.ElementInstance;
 import com.didiglobal.turbo.engine.bo.FlowInfo;
 import com.didiglobal.turbo.engine.bo.FlowInstanceBO;

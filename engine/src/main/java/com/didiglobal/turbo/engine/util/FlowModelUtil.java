@@ -1,6 +1,6 @@
 package com.didiglobal.turbo.engine.util;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.didiglobal.turbo.engine.common.Constants;
 import com.didiglobal.turbo.engine.common.FlowElementType;
 import com.didiglobal.turbo.engine.model.FlowElement;

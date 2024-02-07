@@ -21,7 +21,7 @@ public class NodeInstanceDAO extends BaseDAO<NodeInstanceMapper, NodeInstancePO>
      */
     public int insert(NodeInstancePO nodeInstancePO) {
         try {
-            return baseMapper.insert(nodeInstancePO);
+            return mapper.insertSelective(nodeInstancePO);
         } catch (Exception e) {
             LOGGER.error("insert exception.||nodeInstancePO={}", nodeInstancePO, e);
         }
@@ -47,7 +47,7 @@ public class NodeInstanceDAO extends BaseDAO<NodeInstanceMapper, NodeInstancePO>
             if (nodeInstancePO.getId() == null) {
                 insertNodeInstanceList.add(nodeInstancePO);
             } else {
-                baseMapper.updateStatus(nodeInstancePO);
+                mapper.updateStatus(nodeInstancePO);
             }
         });
 
@@ -55,15 +55,15 @@ public class NodeInstanceDAO extends BaseDAO<NodeInstanceMapper, NodeInstancePO>
             return true;
         }
 
-        return baseMapper.batchInsert(insertNodeInstanceList.get(0).getFlowInstanceId(), insertNodeInstanceList);
+        return mapper.batchInsert(insertNodeInstanceList.get(0).getFlowInstanceId(), insertNodeInstanceList);
     }
 
     public NodeInstancePO selectByNodeInstanceId(String flowInstanceId, String nodeInstanceId) {
-        return baseMapper.selectByNodeInstanceId(flowInstanceId, nodeInstanceId);
+        return mapper.selectByNodeInstanceId(flowInstanceId, nodeInstanceId);
     }
 
     public NodeInstancePO selectBySourceInstanceId(String flowInstanceId, String sourceNodeInstanceId, String nodeKey) {
-        return baseMapper.selectBySourceInstanceId(flowInstanceId, sourceNodeInstanceId, nodeKey);
+        return mapper.selectBySourceInstanceId(flowInstanceId, sourceNodeInstanceId, nodeKey);
     }
 
     /**
@@ -72,7 +72,7 @@ public class NodeInstanceDAO extends BaseDAO<NodeInstanceMapper, NodeInstancePO>
      * @return
      */
     public NodeInstancePO selectRecentOne(String flowInstanceId) {
-        return baseMapper.selectRecentOne(flowInstanceId);
+        return mapper.selectRecentOne(flowInstanceId);
     }
 
     /**
@@ -81,7 +81,7 @@ public class NodeInstanceDAO extends BaseDAO<NodeInstanceMapper, NodeInstancePO>
      * @return
      */
     public NodeInstancePO selectRecentActiveOne(String flowInstanceId) {
-        return baseMapper.selectRecentOneByStatus(flowInstanceId, NodeInstanceStatus.ACTIVE);
+        return mapper.selectRecentOneByStatus(flowInstanceId, NodeInstanceStatus.ACTIVE);
     }
 
     /**
@@ -90,7 +90,7 @@ public class NodeInstanceDAO extends BaseDAO<NodeInstanceMapper, NodeInstancePO>
      * @return
      */
     public NodeInstancePO selectRecentCompletedOne(String flowInstanceId) {
-        return baseMapper.selectRecentOneByStatus(flowInstanceId, NodeInstanceStatus.COMPLETED);
+        return mapper.selectRecentOneByStatus(flowInstanceId, NodeInstanceStatus.COMPLETED);
     }
 
     /**
@@ -101,16 +101,16 @@ public class NodeInstanceDAO extends BaseDAO<NodeInstanceMapper, NodeInstancePO>
      * @return
      */
     public NodeInstancePO selectEnabledOne(String flowInstanceId) {
-        NodeInstancePO nodeInstancePO = baseMapper.selectRecentOneByStatus(flowInstanceId, NodeInstanceStatus.ACTIVE);
+        NodeInstancePO nodeInstancePO = mapper.selectRecentOneByStatus(flowInstanceId, NodeInstanceStatus.ACTIVE);
         if (nodeInstancePO == null) {
             LOGGER.info("selectEnabledOne: there's no active node of the flowInstance.||flowInstanceId={}", flowInstanceId);
-            nodeInstancePO = baseMapper.selectRecentOneByStatus(flowInstanceId, NodeInstanceStatus.COMPLETED);
+            nodeInstancePO = mapper.selectRecentOneByStatus(flowInstanceId, NodeInstanceStatus.COMPLETED);
         }
         return nodeInstancePO;
     }
 
     public List<NodeInstancePO> selectByFlowInstanceId(String flowInstanceId) {
-        return baseMapper.selectByFlowInstanceId(flowInstanceId);
+        return mapper.selectByFlowInstanceId(flowInstanceId);
     }
 
     /**
@@ -120,7 +120,7 @@ public class NodeInstanceDAO extends BaseDAO<NodeInstanceMapper, NodeInstancePO>
      * @return
      */
     public List<NodeInstancePO> selectDescByFlowInstanceId(String flowInstanceId) {
-        return baseMapper.selectDescByFlowInstanceId(flowInstanceId);
+        return mapper.selectDescByFlowInstanceId(flowInstanceId);
     }
 
     /**
@@ -131,6 +131,6 @@ public class NodeInstanceDAO extends BaseDAO<NodeInstanceMapper, NodeInstancePO>
     public void updateStatus(NodeInstancePO nodeInstancePO, int status) {
         nodeInstancePO.setStatus(status);
         nodeInstancePO.setModifyTime(new Date());
-        baseMapper.updateStatus(nodeInstancePO);
+        mapper.updateStatus(nodeInstancePO);
     }
 }

@@ -17,7 +17,7 @@ public class NodeInstanceLogDAO extends BaseDAO<NodeInstanceLogMapper, NodeInsta
      */
     public int insert(NodeInstanceLogPO nodeInstanceLogPO) {
         try {
-            return baseMapper.insert(nodeInstanceLogPO);
+            return mapper.insertSelective(nodeInstanceLogPO);
         } catch (Exception e) {
             LOGGER.error("insert exception.||nodeInstanceLogPO={}", nodeInstanceLogPO, e);
         }
@@ -31,6 +31,6 @@ public class NodeInstanceLogDAO extends BaseDAO<NodeInstanceLogMapper, NodeInsta
      * @return
      */
     public boolean insertList(List<NodeInstanceLogPO> nodeInstanceLogList) {
-        return baseMapper.batchInsert(nodeInstanceLogList.get(0).getFlowInstanceId(), nodeInstanceLogList);
+        return mapper.batchInsert(nodeInstanceLogList.get(0).getFlowInstanceId(), nodeInstanceLogList);
     }
 }

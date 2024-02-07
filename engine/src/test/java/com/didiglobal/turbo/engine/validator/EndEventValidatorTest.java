@@ -4,8 +4,8 @@ import com.didiglobal.turbo.engine.exception.DefinitionException;
 import com.didiglobal.turbo.engine.model.FlowElement;
 import com.didiglobal.turbo.engine.runner.BaseTest;
 import com.didiglobal.turbo.engine.util.EntityBuilder;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -31,10 +31,10 @@ public class EndEventValidatorTest extends BaseTest {
         try {
             endEventValidator.checkIncoming(map, endEvent);
             access = true;
-            Assert.assertTrue(access);
+            Assertions.assertTrue(access);
         } catch (DefinitionException e) {
             LOGGER.error("", e);
-            Assert.assertTrue(access);
+            Assertions.assertTrue(access);
         }
     }
 
@@ -53,10 +53,10 @@ public class EndEventValidatorTest extends BaseTest {
         try {
             endEventValidator.checkIncoming(map, endEventInvalid);
             access = true;
-            Assert.assertFalse(access);
+            Assertions.assertFalse(access);
         } catch (DefinitionException e) {
             LOGGER.error("", e);
-            Assert.assertFalse(access);
+            Assertions.assertFalse(access);
         }
     }
 

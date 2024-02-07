@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ComponentScan("com.didiglobal.turbo.engine")
-@MapperScan("com.didiglobal.turbo.engine.dao")
+@MapperScan("com.didiglobal.turbo.engine.dao.mapper")
 @EnableAutoConfiguration(exclude = {DruidDataSourceAutoConfigure.class})
 public class TurboEngineConfig {
 

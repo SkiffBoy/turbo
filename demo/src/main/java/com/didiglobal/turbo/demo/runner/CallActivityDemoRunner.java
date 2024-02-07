@@ -19,18 +19,14 @@ import com.didiglobal.turbo.engine.result.UpdateFlowResult;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@Order(0)
 @Component
-public class CallActivityDemoRunner implements CommandLineRunner {
+public class CallActivityDemoRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CallActivityDemoRunner.class);
 
@@ -51,8 +47,7 @@ public class CallActivityDemoRunner implements CommandLineRunner {
     private UpdateFlowResult updateSubFlowResult;
     private DeployFlowResult deploySubFlowResult;
 
-    @Override
-    public void run(String... args) {
+    public void run() {
         LOGGER.info("Turbo CallActivity Demo run:");
 
         LOGGER.info("Turbo definition:");
@@ -81,6 +76,7 @@ public class CallActivityDemoRunner implements CommandLineRunner {
         createMainFlowParam.setOperator(operator);
         createMainFlowResult = processEngine.createFlow(createMainFlowParam);
         LOGGER.info("createMainFlow.||createMainFlowResult={}", createMainFlowResult);
+
         // Create sub flow
         createSubFlowParam = new CreateFlowParam(tenant, caller);
         createSubFlowParam.setFlowKey("subFlowKey");
@@ -99,6 +95,7 @@ public class CallActivityDemoRunner implements CommandLineRunner {
         updateMainFlowParam.setFlowModuleId(createMainFlowResult.getFlowModuleId());
         updateMainFlowResult = processEngine.updateFlow(updateMainFlowParam);
         LOGGER.info("updateMainFlow.||updateMainFlowResult={}", updateMainFlowResult);
+
         // Update sub flow
         UpdateFlowParam updateSubFlowParam = new UpdateFlowParam(tenant, caller);
         updateSubFlowParam.setFlowModel(EntityBuilder.buildFlowModelStr3());
@@ -113,6 +110,7 @@ public class CallActivityDemoRunner implements CommandLineRunner {
         deployMainFlowParam.setFlowModuleId(createMainFlowResult.getFlowModuleId());
         deployMainFlowResult = processEngine.deployFlow(deployMainFlowParam);
         LOGGER.info("deployMainFlow.||deployMainFlowResult={}", deployMainFlowResult);
+
         // Deploy sub flow
         DeployFlowParam deploySubFlowParam = new DeployFlowParam(tenant, caller);
         deploySubFlowParam.setFlowModuleId(createSubFlowResult.getFlowModuleId());
@@ -134,7 +132,7 @@ public class CallActivityDemoRunner implements CommandLineRunner {
         // Now it is stuck in the second user node of the parent process, 'Generate Work Order', driving the completion of the parent process
         commitTaskResult = commitMainFlowUserTask2(commitTaskResult);
 
-        assert commitTaskResult.getStatus() == ErrorEnum.SUCCESS.getErrNo();
+        assert commitTaskResult.getErrCode() == ErrorEnum.SUCCESS.getErrNo();
     }
 
     private StartProcessResult startProcessToCallActivity() {

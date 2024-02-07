@@ -18,7 +18,7 @@ public class FlowInstanceMappingDAO extends BaseDAO<FlowInstanceMappingMapper, F
      * @return
      */
     public List<FlowInstanceMappingPO> selectFlowInstanceMappingPOList(String flowInstanceId, String nodeInstanceId) {
-        return baseMapper.selectFlowInstanceMappingPOList(flowInstanceId, nodeInstanceId);
+        return mapper.selectFlowInstanceMappingPOList(flowInstanceId, nodeInstanceId);
     }
 
     /**
@@ -29,7 +29,7 @@ public class FlowInstanceMappingDAO extends BaseDAO<FlowInstanceMappingMapper, F
      * @return
      */
     public FlowInstanceMappingPO selectFlowInstanceMappingPO(String flowInstanceId, String nodeInstanceId) {
-        return baseMapper.selectFlowInstanceMappingPO(flowInstanceId, nodeInstanceId);
+        return mapper.selectFlowInstanceMappingPO(flowInstanceId, nodeInstanceId);
     }
 
     /**
@@ -40,7 +40,7 @@ public class FlowInstanceMappingDAO extends BaseDAO<FlowInstanceMappingMapper, F
      */
     public int insert(FlowInstanceMappingPO flowInstanceMappingPO) {
         try {
-            return baseMapper.insert(flowInstanceMappingPO);
+            return mapper.insertSelective(flowInstanceMappingPO);
         } catch (Exception e) {
             LOGGER.error("insert exception.||flowInstanceMappingPO={}", flowInstanceMappingPO, e);
         }
@@ -53,6 +53,6 @@ public class FlowInstanceMappingDAO extends BaseDAO<FlowInstanceMappingMapper, F
         flowInstanceMappingPO.setNodeInstanceId(nodeInstanceId);
         flowInstanceMappingPO.setType(type);
         flowInstanceMappingPO.setModifyTime(new Date());
-        baseMapper.updateType(flowInstanceMappingPO);
+        mapper.updateType(flowInstanceMappingPO);
     }
 }

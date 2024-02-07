@@ -1,8 +1,8 @@
 package com.didiglobal.turbo.engine.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Table;
 
-@TableName("em_flow_deployment")
+@Table("em_flow_deployment")
 public class FlowDeploymentPO extends OperationPO {
     private String flowDeployId;
     private String flowModuleId;

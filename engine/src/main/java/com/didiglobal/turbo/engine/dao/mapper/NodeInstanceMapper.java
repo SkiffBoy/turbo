@@ -1,15 +1,17 @@
 package com.didiglobal.turbo.engine.dao.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.didiglobal.turbo.engine.dao.provider.NodeInstanceProvider;
 import com.didiglobal.turbo.engine.entity.NodeInstancePO;
+import com.mybatisflex.core.BaseMapper;
 import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
+@Mapper
 public interface NodeInstanceMapper extends BaseMapper<NodeInstancePO> {
 
     @Select("SELECT * FROM ei_node_instance WHERE node_instance_id=#{nodeInstanceId}")

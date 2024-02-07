@@ -1,8 +1,9 @@
 package com.didiglobal.turbo.engine.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 
-@TableName("ei_node_instance_log")
+import com.mybatisflex.annotation.Table;
+
+@Table("ei_node_instance_log")
 public class NodeInstanceLogPO extends CommonPO {
     private String nodeInstanceId;
     private String flowInstanceId;

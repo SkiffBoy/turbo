@@ -3,12 +3,15 @@ package com.didiglobal.turbo.engine.dao;
 import com.didiglobal.turbo.engine.entity.FlowDeploymentPO;
 import com.didiglobal.turbo.engine.runner.BaseTest;
 import com.didiglobal.turbo.engine.util.EntityBuilder;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
-
+@Transactional
+@Rollback
 public class FlowDeploymentDAOTest extends BaseTest {
 
     @Resource
@@ -19,7 +22,7 @@ public class FlowDeploymentDAOTest extends BaseTest {
         FlowDeploymentPO flowDeploymentPO = EntityBuilder.buildFlowDeploymentPO();
         flowDeploymentPO.setFlowDeployId("testFlowDeployId_" + System.currentTimeMillis());
         int result = flowDeploymentDAO.insert(flowDeploymentPO);
-        Assert.assertTrue(result == 1);
+        Assertions.assertTrue(result == 1);
     }
 
     @Test
@@ -29,7 +32,7 @@ public class FlowDeploymentDAOTest extends BaseTest {
         flowDeploymentDAO.insert(flowDeploymentPO);
         String flowDeployId = flowDeploymentPO.getFlowDeployId();
         flowDeploymentPO = flowDeploymentDAO.selectByDeployId(flowDeployId);
-        Assert.assertTrue(flowDeployId.equals(flowDeploymentPO.getFlowDeployId()));
+        Assertions.assertTrue(flowDeployId.equals(flowDeploymentPO.getFlowDeployId()));
 
 
     }
@@ -46,7 +49,7 @@ public class FlowDeploymentDAOTest extends BaseTest {
         flowDeploymentPONew.setFlowDeployId(flowDeploymentPONew.getFlowDeployId()+2);
         flowDeploymentDAO.insert(flowDeploymentPONew);
         FlowDeploymentPO flowDeploymentPORes = flowDeploymentDAO.selectRecentByFlowModuleId(flowModuleId1);
-        Assert.assertTrue(flowDeploymentPONew.getFlowDeployId().equals(flowDeploymentPORes.getFlowDeployId()));
+        Assertions.assertTrue(flowDeploymentPONew.getFlowDeployId().equals(flowDeploymentPORes.getFlowDeployId()));
 
 
 

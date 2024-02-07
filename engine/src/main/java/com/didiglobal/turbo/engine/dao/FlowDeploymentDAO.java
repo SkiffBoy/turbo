@@ -15,7 +15,7 @@ public class FlowDeploymentDAO extends BaseDAO<FlowDeploymentMapper, FlowDeploym
      */
     public int insert(FlowDeploymentPO flowDeploymentPO) {
         try {
-            return baseMapper.insert(flowDeploymentPO);
+            return mapper.insertSelective(flowDeploymentPO);
         } catch (Exception e) {
             LOGGER.error("insert exception.||flowDeploymentPO={}", flowDeploymentPO, e);
         }
@@ -23,7 +23,7 @@ public class FlowDeploymentDAO extends BaseDAO<FlowDeploymentMapper, FlowDeploym
     }
 
     public FlowDeploymentPO selectByDeployId(String flowDeployId) {
-        return baseMapper.selectByDeployId(flowDeployId);
+        return mapper.selectByDeployId(flowDeployId);
     }
 
     /**
@@ -33,6 +33,6 @@ public class FlowDeploymentDAO extends BaseDAO<FlowDeploymentMapper, FlowDeploym
      * @return flowDeploymentPO
      */
     public FlowDeploymentPO selectRecentByFlowModuleId(String flowModuleId) {
-        return baseMapper.selectByModuleId(flowModuleId);
+        return mapper.selectByModuleId(flowModuleId);
     }
 }

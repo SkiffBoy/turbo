@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 public class InstanceDataDAO extends BaseDAO<InstanceDataMapper, InstanceDataPO> {
 
     public InstanceDataPO select(String flowInstanceId, String instanceDataId) {
-        return baseMapper.select(flowInstanceId, instanceDataId);
+        return mapper.select(flowInstanceId, instanceDataId);
     }
 
     /**
@@ -18,7 +18,7 @@ public class InstanceDataDAO extends BaseDAO<InstanceDataMapper, InstanceDataPO>
      * @return
      */
     public InstanceDataPO selectRecentOne(String flowInstanceId) {
-        return baseMapper.selectRecentOne(flowInstanceId);
+        return mapper.selectRecentOne(flowInstanceId);
     }
 
     /**
@@ -29,7 +29,7 @@ public class InstanceDataDAO extends BaseDAO<InstanceDataMapper, InstanceDataPO>
      */
     public int insert(InstanceDataPO instanceDataPO) {
         try {
-            return baseMapper.insert(instanceDataPO);
+            return mapper.insertSelective(instanceDataPO);
         } catch (Exception e) {
             // TODO: 2020/2/1 clear reentrant exception log 
             LOGGER.error("insert exception.||instanceDataPO={}", instanceDataPO, e);

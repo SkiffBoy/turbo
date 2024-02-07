@@ -1,16 +1,20 @@
 package com.didiglobal.turbo.engine.dao;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.didiglobal.turbo.engine.entity.NodeInstanceLogPO;
 import com.didiglobal.turbo.engine.runner.BaseTest;
 import com.didiglobal.turbo.engine.util.EntityBuilder;
-import org.junit.Assert;
-import org.junit.Test;
+import com.mybatisflex.core.query.QueryWrapper;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+@Transactional
+@Rollback
 public class NodeInstanceLogDAOTest extends BaseTest {
 
     @Resource
@@ -25,9 +29,9 @@ public class NodeInstanceLogDAOTest extends BaseTest {
         nodeInstanceLogPOList.add(EntityBuilder.buildNodeInstanceLogPO());
         nodeInstanceLogDAO.insertList(nodeInstanceLogPOList);
 
-        QueryWrapper<NodeInstanceLogPO> entityWrapper = new QueryWrapper<>();
+        QueryWrapper entityWrapper = QueryWrapper.create();
         entityWrapper.in("flow_instance_id", nodeInstanceLogPO.getFlowInstanceId());
         nodeInstanceLogPOList = nodeInstanceLogDAO.list(entityWrapper);
-        Assert.assertTrue(nodeInstanceLogPOList.size() == 3);
+        Assertions.assertTrue(nodeInstanceLogPOList.size() == 3);
     }
 }

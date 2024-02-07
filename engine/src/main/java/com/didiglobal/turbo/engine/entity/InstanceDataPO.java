@@ -1,8 +1,8 @@
 package com.didiglobal.turbo.engine.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Table;
 
-@TableName("ei_instance_data")
+@Table("ei_instance_data")
 public class InstanceDataPO extends CommonPO {
     private String flowInstanceId;
     private String instanceDataId;

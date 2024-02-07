@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @EnableTurboEngine
 @SpringBootApplication(scanBasePackages = {"com.didiglobal.turbo.demo"})
-public class DemoApplication {
+public class DemoTestApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class, args);
+        SpringApplication.run(DemoTestApplication.class, args);
     }
 
 }

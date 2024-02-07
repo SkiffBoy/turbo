@@ -1,9 +1,16 @@
 package com.didiglobal.turbo.demo.util;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.didiglobal.turbo.engine.common.Constants;
 import com.didiglobal.turbo.engine.common.FlowElementType;
-import com.didiglobal.turbo.engine.model.*;
+import com.didiglobal.turbo.engine.model.CallActivity;
+import com.didiglobal.turbo.engine.model.EndEvent;
+import com.didiglobal.turbo.engine.model.ExclusiveGateway;
+import com.didiglobal.turbo.engine.model.FlowElement;
+import com.didiglobal.turbo.engine.model.FlowModel;
+import com.didiglobal.turbo.engine.model.SequenceFlow;
+import com.didiglobal.turbo.engine.model.StartEvent;
+import com.didiglobal.turbo.engine.model.UserTask;
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;

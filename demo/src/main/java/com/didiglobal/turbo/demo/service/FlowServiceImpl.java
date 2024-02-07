@@ -1,9 +1,6 @@
 package com.didiglobal.turbo.demo.service;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.didiglobal.turbo.demo.enums.FlowModuleStatusEnum;
 import com.didiglobal.turbo.demo.pojo.request.CreateFlowRequest;
 import com.didiglobal.turbo.demo.pojo.request.DeployFlowRequest;
@@ -17,17 +14,17 @@ import com.didiglobal.turbo.engine.dao.FlowDefinitionDAO;
 import com.didiglobal.turbo.engine.dao.FlowDeploymentDAO;
 import com.didiglobal.turbo.engine.engine.ProcessEngine;
 import com.didiglobal.turbo.engine.entity.FlowDefinitionPO;
-import com.didiglobal.turbo.engine.entity.FlowDeploymentPO;
 import com.didiglobal.turbo.engine.result.CreateFlowResult;
 import com.didiglobal.turbo.engine.result.DeployFlowResult;
 import com.didiglobal.turbo.engine.result.FlowModuleResult;
 import com.didiglobal.turbo.engine.result.UpdateFlowResult;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,16 +92,15 @@ public class FlowServiceImpl {
      * @return 查询流程结果
      */
     public FlowModuleListResponse getFlowModuleList(GetFlowModuleListRequest getFlowModuleListRequest) {
-
         Page<FlowDefinitionPO> page = buildGetFlowModuleListPage(getFlowModuleListRequest);
-        QueryWrapper<FlowDefinitionPO> queryWrapper = buildGetFlowModuleListQueryWrapper(getFlowModuleListRequest);
-        IPage<FlowDefinitionPO> pageRes = flowDefinitionDAO.page(page, queryWrapper);
+        QueryWrapper queryWrapper = buildGetFlowModuleListQueryWrapper(getFlowModuleListRequest);
+        Page<FlowDefinitionPO> pageRes = flowDefinitionDAO.page(page, queryWrapper);
         List<FlowModuleResponse> flowModuleList = new ArrayList<>();
         for (FlowDefinitionPO flowDefinitionPO : pageRes.getRecords()) {
             FlowModuleResponse getFlowModuleResponse = new FlowModuleResponse();
             BeanUtils.copyProperties(flowDefinitionPO, getFlowModuleResponse);
-            QueryWrapper<FlowDeploymentPO> flowDeployQuery = buildCountFlowDeployQueryWrapper(flowDefinitionPO.getFlowModuleId());
-            int count = flowDeploymentDAO.count(flowDeployQuery);
+            QueryWrapper flowDeployQuery = buildCountFlowDeployQueryWrapper(flowDefinitionPO.getFlowModuleId());
+            long count = flowDeploymentDAO.count(flowDeployQuery);
             if (count >= 1) {
                 //4 已发布
                 getFlowModuleResponse.setStatus(FlowModuleStatusEnum.PUBLISHED.getValue());
@@ -113,21 +109,23 @@ public class FlowServiceImpl {
         }
         FlowModuleListResponse flowModuleListResponse = new FlowModuleListResponse();
         flowModuleListResponse.setFlowModuleList(flowModuleList);
-        BeanUtils.copyProperties(pageRes, flowModuleListResponse);
+        flowModuleListResponse.setCurrent(pageRes.getPageNumber());
+        flowModuleListResponse.setSize(pageRes.getPageSize());
+        flowModuleListResponse.setTotal(pageRes.getTotalRow());
         return flowModuleListResponse;
     }
 
     private Page<FlowDefinitionPO> buildGetFlowModuleListPage(GetFlowModuleListRequest getFlowModuleListRequest) {
         Page<FlowDefinitionPO> page = new Page<>();
         if (getFlowModuleListRequest.getSize() != null && getFlowModuleListRequest.getCurrent() != null) {
-            page.setCurrent(getFlowModuleListRequest.getCurrent());
-            page.setSize(getFlowModuleListRequest.getSize());
+            page.setPageNumber(getFlowModuleListRequest.getCurrent());
+            page.setPageSize(getFlowModuleListRequest.getSize());
         }
         return page;
     }
 
-    private QueryWrapper<FlowDefinitionPO> buildGetFlowModuleListQueryWrapper(GetFlowModuleListRequest getFlowModuleListRequest) {
-        QueryWrapper<FlowDefinitionPO> queryWrapper = new QueryWrapper<>();
+    private QueryWrapper buildGetFlowModuleListQueryWrapper(GetFlowModuleListRequest getFlowModuleListRequest) {
+        QueryWrapper queryWrapper = QueryWrapper.create();
         if (StringUtils.isNotBlank(getFlowModuleListRequest.getFlowModuleId())) {
             queryWrapper.eq("flow_module_id", getFlowModuleListRequest.getFlowModuleId());
         }
@@ -137,12 +135,12 @@ public class FlowServiceImpl {
         if (StringUtils.isNotBlank(getFlowModuleListRequest.getFlowDeployId())) {
             queryWrapper.eq("flow_module_id", getFlowModuleListRequest.getFlowDeployId());
         }
-        queryWrapper.orderByDesc("modify_time");
+        queryWrapper.orderBy("modify_time", false);
         return queryWrapper;
     }
 
-    private QueryWrapper<FlowDeploymentPO> buildCountFlowDeployQueryWrapper(String flowModuleId) {
-        QueryWrapper<FlowDeploymentPO> flowDeployQuery = new QueryWrapper<>();
+    private QueryWrapper buildCountFlowDeployQueryWrapper(String flowModuleId) {
+        QueryWrapper flowDeployQuery = QueryWrapper.create();
         flowDeployQuery.eq("flow_module_id", flowModuleId);
         flowDeployQuery.eq("status", FlowDeploymentStatus.DEPLOYED);
         return flowDeployQuery;

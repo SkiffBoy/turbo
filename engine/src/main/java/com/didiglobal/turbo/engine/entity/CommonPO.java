@@ -1,12 +1,12 @@
 package com.didiglobal.turbo.engine.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
 
 import java.util.Date;
 
 public class CommonPO {
-    @TableId(type = IdType.AUTO)
+    @Id(keyType = KeyType.Auto)
     private Long id;
     private String tenant;
     private String caller;

@@ -4,13 +4,17 @@ import com.didiglobal.turbo.engine.common.NodeInstanceStatus;
 import com.didiglobal.turbo.engine.entity.NodeInstancePO;
 import com.didiglobal.turbo.engine.runner.BaseTest;
 import com.didiglobal.turbo.engine.util.EntityBuilder;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+@Transactional
+@Rollback
 public class NodeInstanceDAOTest extends BaseTest {
 
     @Resource
@@ -20,7 +24,7 @@ public class NodeInstanceDAOTest extends BaseTest {
     public void insert(){
         NodeInstancePO nodeInstancePO = EntityBuilder.buildNodeInstancePO();
         int result = nodeInstanceDAO.insert(nodeInstancePO);
-        Assert.assertTrue(result == 1);
+        Assertions.assertTrue(result == 1);
     }
 
     @Test
@@ -43,6 +47,6 @@ public class NodeInstanceDAOTest extends BaseTest {
 
         nodeInstanceDAO.updateStatus(nodeInstancePO, NodeInstanceStatus.COMPLETED);
         NodeInstancePO result = nodeInstanceDAO.selectByNodeInstanceId(nodeInstancePO.getFlowInstanceId(), nodeInstancePO.getNodeInstanceId());
-        Assert.assertTrue(result.getStatus() == NodeInstanceStatus.COMPLETED);
+        Assertions.assertTrue(result.getStatus() == NodeInstanceStatus.COMPLETED);
     }
 }

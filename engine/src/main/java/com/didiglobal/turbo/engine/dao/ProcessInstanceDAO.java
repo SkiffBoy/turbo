@@ -10,7 +10,7 @@ import java.util.Date;
 public class ProcessInstanceDAO extends BaseDAO<ProcessInstanceMapper, FlowInstancePO> {
 
     public FlowInstancePO selectByFlowInstanceId(String flowInstanceId) {
-        return baseMapper.selectByFlowInstanceId(flowInstanceId);
+        return mapper.selectByFlowInstanceId(flowInstanceId);
     }
 
     /**
@@ -21,7 +21,7 @@ public class ProcessInstanceDAO extends BaseDAO<ProcessInstanceMapper, FlowInsta
      */
     public int insert(FlowInstancePO flowInstancePO) {
         try {
-            return baseMapper.insert(flowInstancePO);
+            return mapper.insertSelective(flowInstancePO);
         } catch (Exception e) {
             // TODO: 2020/2/1 clear reentrant exception log
             LOGGER.error("insert exception.||flowInstancePO={}", flowInstancePO, e);
@@ -37,6 +37,6 @@ public class ProcessInstanceDAO extends BaseDAO<ProcessInstanceMapper, FlowInsta
     public void updateStatus(FlowInstancePO flowInstancePO, int status) {
         flowInstancePO.setStatus(status);
         flowInstancePO.setModifyTime(new Date());
-        baseMapper.updateStatus(flowInstancePO);
+        mapper.updateStatus(flowInstancePO);
     }
 }

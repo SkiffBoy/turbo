@@ -1,11 +1,12 @@
 package com.didiglobal.turbo.engine.dao.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.didiglobal.turbo.engine.entity.InstanceDataPO;
+import com.mybatisflex.core.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-
+@Mapper
 public interface InstanceDataMapper extends BaseMapper<InstanceDataPO> {
 
     @Select("SELECT * FROM ei_instance_data WHERE instance_data_id=#{instanceDataId}")

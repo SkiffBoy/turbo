@@ -1,6 +1,6 @@
 package com.didiglobal.turbo.engine.processor;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.didiglobal.turbo.engine.common.ErrorEnum;
 import com.didiglobal.turbo.engine.common.FlowDefinitionStatus;
 import com.didiglobal.turbo.engine.common.FlowDeploymentStatus;

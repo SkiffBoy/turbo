@@ -1,6 +1,6 @@
 package com.didiglobal.turbo.engine.executor;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.didiglobal.turbo.engine.common.RuntimeContext;
 import com.didiglobal.turbo.engine.model.FlowElement;
 import com.didiglobal.turbo.engine.model.FlowModel;
@@ -9,14 +9,22 @@ import com.didiglobal.turbo.engine.runner.BaseTest;
 import com.didiglobal.turbo.engine.util.EntityBuilder;
 import com.didiglobal.turbo.engine.util.FlowModelUtil;
 import com.google.common.collect.Maps;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
+@Transactional
+@Rollback
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ExclusiveGatewayExecutorTest extends BaseTest {
 
     @Resource
@@ -26,7 +34,7 @@ public class ExclusiveGatewayExecutorTest extends BaseTest {
 
     private RuntimeContext runtimeContext;
 
-    @Before
+    @BeforeEach
     public void initExclusiveGatewayExecutor() {
         List<FlowElement> flowElementList = EntityBuilder.buildFlowElementList();
 
@@ -54,6 +62,7 @@ public class ExclusiveGatewayExecutorTest extends BaseTest {
     }
 
     @Test
+    @Order(1)
     public void testDoExecute() {
         try {
             exclusiveGatewayExecutor.doExecute(runtimeContext);
@@ -63,11 +72,12 @@ public class ExclusiveGatewayExecutorTest extends BaseTest {
     }
 
     @Test
+    @Order(2)
     public void testGetExecuteExecutor() {
         try {
             exclusiveGatewayExecutor.getExecuteExecutor(runtimeContext);
             String modelKey = runtimeContext.getCurrentNodeModel().getKey();
-            Assert.assertTrue("userTask2".equals(modelKey));
+            Assertions.assertTrue("userTask2".equals(modelKey));
         } catch (Exception e) {
             LOGGER.error("", e);
         }

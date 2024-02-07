@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>engine</artifactId>
+    <artifactId>engine-fork</artifactId>
     <version>1.1.1</version>
     <packaging>jar</packaging>
 
@@ -15,7 +15,9 @@
     </parent>
     <properties>
         <groovy.version>2.3.7</groovy.version>
-        <spring-boot-starter.version>1.5.10.RELEASE</spring-boot-starter.version>
+        <spring-boot-starter.version>2.6.15</spring-boot-starter.version>
+        <mybatis-flex.version>1.7.9</mybatis-flex.version>
+        <fastjson2.version>2.0.46</fastjson2.version>
     </properties>
 
     <dependencies>
@@ -37,18 +39,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-aop</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>com.mybatis-flex</groupId>
+            <artifactId>mybatis-flex-spring-boot-starter</artifactId>
+            <version>${mybatis-flex.version}</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -68,8 +61,14 @@
             <artifactId>java-uuid-generator</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${fastjson2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2-extension-spring5</artifactId>
+            <version>${fastjson2.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
