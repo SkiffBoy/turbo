@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.didiglobal.turbo.engine.dao.mapper.NodeInstanceMapper">
+    <resultMap id="NodeInstancePO" type="com.didiglobal.turbo.engine.entity.NodeInstancePO">
+        <id     column="id" property="id"/>
+        <result column="tenant" property="tenant"/>
+        <result column="caller" property="caller"/>
+        <result column="create_time" property="createTime"/>
+        <result column="archive" property="archive"/>
+
+        <result column="flow_instance_id" property="flowInstanceId"/>
+        <result column="flow_deploy_id" property="flowDeployId"/>
+        <result column="instance_data_id" property="instanceDataId"/>
+        <result column="node_instance_id" property="nodeInstanceId"/>
+        <result column="source_node_instance_id" property="sourceNodeInstanceId"/>
+        <result column="node_key" property="nodeKey"/>
+        <result column="source_node_key" property="sourceNodeKey"/>
+        <result column="status" property="status"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
+
+
+    <!-- selectByNodeInstanceId -->
+    <select id="selectByNodeInstanceId" resultMap="NodeInstancePO">
+        SELECT * FROM ei_node_instance WHERE node_instance_id = #{nodeInstanceId}
+    </select>
+
+
+    <!-- selectRecentOne -->
+    <select id="selectRecentOne" resultMap="NodeInstancePO">
+        SELECT * FROM ei_node_instance WHERE flow_instance_id = #{flowInstanceId} ORDER BY id DESC LIMIT 1
+    </select>
+    <select id="selectRecentOne" databaseId="MySQL" resultMap="NodeInstancePO">
+        SELECT * FROM ei_node_instance WHERE flow_instance_id = #{flowInstanceId} ORDER BY id DESC LIMIT 1
+    </select>
+    <select id="selectRecentOne" databaseId="Oracle" resultMap="NodeInstancePO">
+        SELECT * FROM (SELECT * FROM ei_node_instance WHERE flow_instance_id = #{flowInstanceId} ORDER BY id DESC) WHERE ROWNUM = 1
+    </select>
+    <select id="selectRecentOne" databaseId="PostgreSQL" resultMap="NodeInstancePO">
+        SELECT * FROM ei_node_instance WHERE flow_instance_id = #{flowInstanceId} ORDER BY id DESC LIMIT 1
+    </select>
+
+
+    <!-- selectByFlowInstanceId -->
+    <select id="selectByFlowInstanceId" resultMap="NodeInstancePO">
+        SELECT * FROM ei_node_instance WHERE flow_instance_id = #{flowInstanceId} ORDER BY id
+    </select>
+
+
+    <!-- selectDescByFlowInstanceId -->
+    <select id="selectDescByFlowInstanceId" resultMap="NodeInstancePO">
+        SELECT * FROM ei_node_instance WHERE flow_instance_id = #{flowInstanceId} ORDER BY id DESC
+    </select>
+
+
+    <!-- selectRecentOneByStatus -->
+    <select id="selectRecentOneByStatus" resultMap="NodeInstancePO">
+        SELECT * FROM ei_node_instance WHERE flow_instance_id = #{flowInstanceId} and status = #{status} ORDER BY id DESC LIMIT 1
+    </select>
+    <select id="selectRecentOneByStatus" databaseId="MySQL" resultMap="NodeInstancePO">
+        SELECT * FROM ei_node_instance WHERE flow_instance_id = #{flowInstanceId} and status = #{status} ORDER BY id DESC LIMIT 1
+    </select>
+    <select id="selectRecentOneByStatus" databaseId="Oracle" resultMap="NodeInstancePO">
+        SELECT * FROM (SELECT * FROM ei_node_instance WHERE flow_instance_id = #{flowInstanceId} and status = #{status} ORDER BY id DESC) WHERE ROWNUM = 1
+    </select>
+    <select id="selectRecentOneByStatus" databaseId="PostgreSQL" resultMap="NodeInstancePO">
+        SELECT * FROM ei_node_instance WHERE flow_instance_id = #{flowInstanceId} and status = #{status} ORDER BY id DESC LIMIT 1
+    </select>
+
+
+    <!-- selectBySourceInstanceId -->
+    <select id="selectBySourceInstanceId" resultMap="NodeInstancePO">
+        SELECT * FROM ei_node_instance WHERE flow_instance_id = #{flowInstanceId} AND node_key = #{nodeKey} AND source_node_instance_id = #{sourceNodeInstanceId}
+    </select>
+
+
+    <!-- updateStatus -->
+    <update id="updateStatus" parameterType="com.didiglobal.turbo.engine.entity.NodeInstancePO">
+        UPDATE ei_node_instance SET status = #{status}, modify_time = #{modifyTime} WHERE node_instance_id = #{nodeInstanceId}
+    </update>
+    <update id="updateStatus" databaseId="MySQL" parameterType="com.didiglobal.turbo.engine.entity.NodeInstancePO">
+        UPDATE ei_node_instance SET status = #{status}, modify_time = now() WHERE node_instance_id = #{nodeInstanceId}
+    </update>
+    <update id="updateStatus" databaseId="Oracle" parameterType="com.didiglobal.turbo.engine.entity.NodeInstancePO">
+        UPDATE ei_node_instance SET status = #{status}, modify_time = SYSDATE WHERE node_instance_id = #{nodeInstanceId}
+    </update>
+    <update id="updateStatus" databaseId="PostgreSQL" parameterType="com.didiglobal.turbo.engine.entity.NodeInstancePO">
+        UPDATE ei_node_instance SET status = #{status}, modify_time = current_timestamp WHERE node_instance_id = #{nodeInstanceId}
+    </update>
+
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.didiglobal.turbo.engine.dao.mapper.FlowInstanceMappingMapper">
+    <resultMap id="FlowInstanceMappingPO" type="com.didiglobal.turbo.engine.entity.FlowInstanceMappingPO">
+        <id     column="id" property="id"/>
+        <result column="tenant" property="tenant"/>
+        <result column="caller" property="caller"/>
+        <result column="create_time" property="createTime"/>
+        <result column="archive" property="archive"/>
+
+        <result column="flow_instance_id" property="flowInstanceId"/>
+        <result column="node_instance_id" property="nodeInstanceId"/>
+        <result column="node_key" property="nodeKey"/>
+        <result column="sub_flow_instance_id" property="subFlowInstanceId"/>
+        <result column="type" property="type"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
+
+    <!-- selectFlowInstanceMappingPOList -->
+    <select id="selectFlowInstanceMappingPOList" resultMap="FlowInstanceMappingPO">
+        SELECT * FROM ei_flow_instance_mapping WHERE flow_instance_id = #{flowInstanceId} and node_instance_id = #{nodeInstanceId}
+    </select>
+
+
+    <!-- selectFlowInstanceMappingPO -->
+    <select id="selectFlowInstanceMappingPO" resultMap="FlowInstanceMappingPO">
+        SELECT * FROM ei_flow_instance_mapping WHERE flow_instance_id = #{flowInstanceId} and node_instance_id = #{nodeInstanceId}
+    </select>
+
+
+    <!-- updateType -->
+    <update id="updateType" parameterType="com.didiglobal.turbo.engine.entity.FlowInstanceMappingPO">
+        UPDATE ei_flow_instance_mapping SET type = #{type}, modify_time = #{modifyTime} WHERE flow_instance_id = #{flowInstanceId} and node_instance_id = #{nodeInstanceId}
+    </update>
+    <update id="updateType" databaseId="MySQL" parameterType="com.didiglobal.turbo.engine.entity.FlowInstanceMappingPO">
+        UPDATE ei_flow_instance_mapping SET type = #{type}, modify_time = now() WHERE flow_instance_id = #{flowInstanceId} and node_instance_id = #{nodeInstanceId}
+    </update>
+    <update id="updateType" databaseId="Oracle" parameterType="com.didiglobal.turbo.engine.entity.FlowInstanceMappingPO">
+        UPDATE ei_flow_instance_mapping SET type = #{type}, modify_time = SYSDATE WHERE flow_instance_id = #{flowInstanceId} and node_instance_id = #{nodeInstanceId}
+    </update>
+    <update id="updateType" databaseId="PostgreSQL" parameterType="com.didiglobal.turbo.engine.entity.FlowInstanceMappingPO">
+        UPDATE ei_flow_instance_mapping SET type = #{type}, modify_time = current_timestamp WHERE flow_instance_id = #{flowInstanceId} and node_instance_id = #{nodeInstanceId}
+    </update>
+
+</mapper>

@@ -4,16 +4,17 @@
 > 1. 替换 Dao 层的 mybatis-plus 为 mybatis-flex
 > 2. SpringBoot 升级为 2.x
 > 3. Fastjson 替换为 Fastjson2
-> 4. sql 脚本字符编码语法调整
-> 5. 测试用例语法调整，并且使用maven插件测试全部通过
+> 4. sql 脚本字符编码语法调整，空字符串默认值设置为允许空
+> 5. 从 `1.2.0` 添加 Oracle、Postgre 数据库的建表 sql
 > 6. 构建坐标 com.didiglobal.turbo:engine 发布为 io.github.skiffboy:turbo-engine
+> 7. 测试用例语法调整，并且使用maven插件测试全部通过
 
 * maven 坐标更改
 ```xml
 <dependency>
   <groupId>io.github.skiffboy</groupId>
   <artifactId>turbo-engine</artifactId>
-  <version>1.1.1</version>
+  <version>1.2.0</version>
 </dependency>
 ```
 
@@ -21,7 +22,7 @@
 <dependency>
   <groupId>io.github.skiffboy</groupId>
   <artifactId>turbo-engine-demo</artifactId>
-  <version>1.1.1</version>
+  <version>1.2.0</version>
 </dependency>
 ```
 

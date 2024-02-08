@@ -6,7 +6,7 @@
     <groupId>io.github.skiffboy</groupId>
     <artifactId>turbo-forked</artifactId>
     <packaging>pom</packaging>
-    <version>1.1.1</version>
+    <version>1.2.0</version>
 
     <name>turbo</name>
     <description>Turbo is a light-weight flow engine framework, support BPMN2.0</description>
@@ -60,16 +60,16 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
 
         <spring-boot.version>2.6.15</spring-boot.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
-        <druid.version>1.1.20</druid.version>
+        <ojdbc.version>11.2.0.4</ojdbc.version>
+        <druid.version>1.2.21</druid.version>
         <java-uuid-generator.version>3.1.4</java-uuid-generator.version>
-        <fastjson.version>1.2.83</fastjson.version>
-        <groovy.version>2.3.7</groovy.version>
+        <groovy.version>2.4.21</groovy.version>
         <guava.version>31.0.1-jre</guava.version>
         <mybatis-flex.version>1.7.9</mybatis-flex.version>
     </properties>
@@ -129,6 +129,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.database.jdbc</groupId>
+                <artifactId>ojdbc6</artifactId>
+                <version>${ojdbc.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

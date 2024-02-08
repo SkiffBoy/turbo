@@ -89,7 +89,7 @@ public class NodeInstanceMapperTest extends BaseTest {
         NodeInstancePO nodeInstancePO2 = EntityBuilder.buildDynamicNodeInstancePO();
         nodeInstancePO2.setFlowInstanceId(firstNodeInstancePO.getFlowInstanceId());
         nodeInstancePOList.add(nodeInstancePO2);
-        nodeInstanceMapper.batchInsert(firstNodeInstancePO.getFlowInstanceId(), nodeInstancePOList);
+        nodeInstanceMapper.insertBatch(nodeInstancePOList);
         List<NodeInstancePO> result = nodeInstanceMapper.selectByFlowInstanceId(firstNodeInstancePO.getFlowInstanceId());
         Assertions.assertTrue(result.size() == 3);
     }

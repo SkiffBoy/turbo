@@ -29,7 +29,7 @@ public class NodeInstanceLogMapperTest extends BaseTest {
         nodeInstanceLogPOList.add(nodeInstanceLogPO);
         nodeInstanceLogPOList.add(EntityBuilder.buildNodeInstanceLogPO(flowInstanceId));
         nodeInstanceLogPOList.add(EntityBuilder.buildNodeInstanceLogPO(flowInstanceId));
-        nodeInstanceLogMapper.batchInsert(nodeInstanceLogPO.getFlowInstanceId(), nodeInstanceLogPOList);
+        nodeInstanceLogMapper.insertBatch(nodeInstanceLogPOList);
 
         QueryWrapper entityWrapper = QueryWrapper.create();
         entityWrapper.in("flow_instance_id", nodeInstanceLogPO.getFlowInstanceId());

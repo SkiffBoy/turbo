@@ -55,7 +55,7 @@ public class NodeInstanceDAO extends BaseDAO<NodeInstanceMapper, NodeInstancePO>
             return true;
         }
 
-        return mapper.batchInsert(insertNodeInstanceList.get(0).getFlowInstanceId(), insertNodeInstanceList);
+        return mapper.insertBatch(insertNodeInstanceList) > 0;
     }
 
     public NodeInstancePO selectByNodeInstanceId(String flowInstanceId, String nodeInstanceId) {

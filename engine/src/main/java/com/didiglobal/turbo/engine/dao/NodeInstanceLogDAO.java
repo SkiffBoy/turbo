@@ -31,6 +31,6 @@ public class NodeInstanceLogDAO extends BaseDAO<NodeInstanceLogMapper, NodeInsta
      * @return
      */
     public boolean insertList(List<NodeInstanceLogPO> nodeInstanceLogList) {
-        return mapper.batchInsert(nodeInstanceLogList.get(0).getFlowInstanceId(), nodeInstanceLogList);
+        return mapper.insertBatch(nodeInstanceLogList) > 0;
     }
 }

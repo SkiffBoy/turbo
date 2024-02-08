@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.didiglobal.turbo.engine.dao.mapper.FlowDeploymentMapper">
+    <resultMap id="FlowDeploymentPO" type="com.didiglobal.turbo.engine.entity.FlowDeploymentPO">
+        <id     column="id" property="id"/>
+        <result column="tenant" property="tenant"/>
+        <result column="caller" property="caller"/>
+        <result column="create_time" property="createTime"/>
+        <result column="archive" property="archive"/>
+
+        <result column="flow_deploy_id" property="flowDeployId"/>
+        <result column="flow_module_id" property="flowModuleId"/>
+        <result column="flow_name" property="flowName"/>
+        <result column="flow_key" property="flowKey"/>
+        <result column="flow_model" property="flowModel"/>
+        <result column="status" property="status"/>
+
+        <result column="operator" property="operator"/>
+        <result column="modify_time" property="modifyTime"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+
+    <!-- selectByDeployId -->
+    <select id="selectByDeployId" resultMap="FlowDeploymentPO">
+        SELECT * FROM em_flow_deployment WHERE flow_deploy_id = #{flowDeployId}
+    </select>
+
+
+    <!-- selectByModuleId -->
+    <select id="selectByModuleId" resultMap="FlowDeploymentPO">
+        SELECT * FROM em_flow_deployment WHERE flow_module_id = #{flowModuleId} ORDER BY id DESC LIMIT 1
+    </select>
+    <select id="selectByModuleId" databaseId="MySQL" resultMap="FlowDeploymentPO">
+        SELECT * FROM em_flow_deployment WHERE flow_module_id = #{flowModuleId} ORDER BY id DESC LIMIT 1
+    </select>
+    <select id="selectByModuleId" databaseId="Oracle" resultMap="FlowDeploymentPO">
+        SELECT * FROM (SELECT * FROM em_flow_deployment WHERE flow_module_id = #{flowModuleId} ORDER BY id DESC) WHERE ROWNUM = 1
+    </select>
+    <select id="selectByModuleId" databaseId="PostgreSQL" resultMap="FlowDeploymentPO">
+        SELECT * FROM em_flow_deployment WHERE flow_module_id = #{flowModuleId} ORDER BY id DESC LIMIT 1
+    </select>
+
+</mapper>

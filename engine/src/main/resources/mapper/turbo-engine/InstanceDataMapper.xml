@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.didiglobal.turbo.engine.dao.mapper.InstanceDataMapper">
+    <resultMap id="InstanceDataPO" type="com.didiglobal.turbo.engine.entity.InstanceDataPO">
+        <id     column="id" property="id"/>
+        <result column="tenant" property="tenant"/>
+        <result column="caller" property="caller"/>
+        <result column="create_time" property="createTime"/>
+        <result column="archive" property="archive"/>
+
+        <result column="flow_instance_id" property="flowInstanceId"/>
+        <result column="instance_data_id" property="instanceDataId"/>
+        <result column="node_instance_id" property="nodeInstanceId"/>
+        <result column="flow_deploy_id" property="flowDeployId"/>
+        <result column="flow_module_id" property="flowModuleId"/>
+        <result column="node_key" property="nodeKey"/>
+        <result column="instance_data" property="instanceData"/>
+        <result column="instance_data_encode" property="instanceDataEncode"/>
+        <result column="type" property="type"/>
+    </resultMap>
+
+
+    <!-- select -->
+    <select id="select" resultMap="InstanceDataPO">
+        SELECT * FROM ei_instance_data WHERE instance_data_id = #{instanceDataId}
+    </select>
+
+
+    <!-- selectRecentOne -->
+    <select id="selectRecentOne" resultMap="InstanceDataPO">
+        SELECT * FROM ei_instance_data WHERE flow_instance_id = #{flowInstanceId} ORDER BY id DESC LIMIT 1
+    </select>
+    <select id="selectRecentOne" databaseId="MySQL" resultMap="InstanceDataPO">
+        SELECT * FROM ei_instance_data WHERE flow_instance_id = #{flowInstanceId} ORDER BY id DESC LIMIT 1
+    </select>
+    <select id="selectRecentOne" databaseId="Oracle" resultMap="InstanceDataPO">
+        SELECT * FROM (SELECT * FROM ei_instance_data WHERE flow_instance_id = #{flowInstanceId} ORDER BY id DESC) WHERE ROWNUM = 1
+    </select>
+    <select id="selectRecentOne" databaseId="PostgreSQL" resultMap="InstanceDataPO">
+        SELECT * FROM ei_instance_data WHERE flow_instance_id = #{flowInstanceId} ORDER BY id DESC LIMIT 1
+    </select>
+
+</mapper>

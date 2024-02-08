@@ -6,7 +6,7 @@
 
     <groupId>io.github.skiffboy</groupId>
     <artifactId>turbo-engine</artifactId>
-    <version>1.1.1</version>
+    <version>1.2.0</version>
     <packaging>jar</packaging>
 
     <name>turbo-engine</name>
@@ -16,10 +16,13 @@
     <parent>
         <groupId>io.github.skiffboy</groupId>
         <artifactId>turbo-forked</artifactId>
-        <version>1.1.1</version>
+        <version>1.2.0</version>
     </parent>
     <properties>
-        <groovy.version>2.3.7</groovy.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>11</java.version>
+
+        <groovy.version>2.4.21</groovy.version>
         <spring-boot-starter.version>2.6.15</spring-boot-starter.version>
         <mybatis-flex.version>1.7.9</mybatis-flex.version>
         <fastjson2.version>2.0.46</fastjson2.version>
@@ -52,6 +55,16 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc6</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
